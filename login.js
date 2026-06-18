@@ -5,6 +5,6 @@ document
 e.preventDefault();
 
 window.location.href =
-"pages/dashboard.html";
+"dashboard.html";
 
 });
