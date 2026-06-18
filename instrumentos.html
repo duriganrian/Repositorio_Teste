@@ -1,1 +1,159 @@
-ainda nada
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Instrumentos</title>
+
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../css/dashboard.css">
+<link rel="stylesheet" href="../css/instrumentos.css">
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<aside class="sidebar">
+
+<h2>Fundição Moreno</h2>
+
+<ul>
+
+<li><a href="dashboard.html">Dashboard</a></li>
+
+<li>
+<a class="active" href="instrumentos.html">
+Instrumentos
+</a>
+</li>
+
+<li><a href="calibracoes.html">Calibrações</a></li>
+
+<li><a href="controle-dimensional.html">
+Controle Dimensional
+</a></li>
+
+<li><a href="certificados.html">Certificados</a></li>
+
+<li><a href="relatorios.html">Relatórios</a></li>
+
+<li><a href="usuarios.html">Usuários</a></li>
+
+<li><a href="auditoria.html">Auditoria</a></li>
+
+<li><a href="desenvolvedor.html">Desenvolvedor</a></li>
+
+</ul>
+
+</aside>
+
+<main class="content">
+
+<div class="page-header">
+
+<h1>Instrumentos</h1>
+
+<button id="btnNovo">
+Novo Instrumento
+</button>
+
+</div>
+
+<div class="form-card">
+
+<h2>Cadastrar Instrumento</h2>
+
+<form id="instrumentoForm">
+
+<input
+type="text"
+id="codigo"
+placeholder="Código"
+required>
+
+<input
+type="text"
+id="nome"
+placeholder="Nome"
+required>
+
+<input
+type="text"
+id="tipo"
+placeholder="Tipo"
+required>
+
+<input
+type="text"
+id="fabricante"
+placeholder="Fabricante">
+
+<input
+type="text"
+id="modelo"
+placeholder="Modelo">
+
+<input
+type="text"
+id="serie"
+placeholder="Número de Série">
+
+<input
+type="date"
+id="ultimaCalibracao">
+
+<input
+type="date"
+id="proximaCalibracao">
+
+<button type="submit">
+Salvar Instrumento
+</button>
+
+</form>
+
+</div>
+
+<div class="table-card">
+
+<h2>Instrumentos Cadastrados</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Código</th>
+<th>Nome</th>
+<th>Tipo</th>
+<th>Série</th>
+<th>Próx. Calibração</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tabelaInstrumentos">
+
+</tbody>
+
+</table>
+
+</div>
+
+</main>
+
+</div>
+
+<script src="../js/instrumentos.js"></script>
+
+</body>
+</html>
