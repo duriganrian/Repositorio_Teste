@@ -1,1 +1,66 @@
-<!DOCTYPE html><html lang='pt-BR'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Fundição Moreno</title><link rel='stylesheet' href='style.css'></head><body><div class='login-container'><div class='logo-area'><h1>MORENO</h1><span>FUNDIÇÃO</span></div><div class='card'><div class='tag'>METROLOGIA</div><h2>Entrar no sistema</h2><p>Informe suas credenciais para acessar a plataforma.</p><input type='email' placeholder='seu@email.com'><input type='password' placeholder='Senha'><label class='remember'><input type='checkbox'> Lembrar por 24h</label><button>Entrar</button></div></div></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fundição Moreno</title>
+
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+<div class="container">
+
+  <div class="brand">
+    <h1>MORENO</h1>
+    <span>FUNDIÇÃO</span>
+  </div>
+
+  <div class="login-card">
+
+    <div class="tag">
+      SISTEMA DE METROLOGIA
+    </div>
+
+    <h2>Entrar no sistema</h2>
+
+    <p>
+      Faça login para acessar a plataforma.
+    </p>
+
+    <form id="loginForm">
+
+      <input
+        type="email"
+        id="email"
+        placeholder="E-mail"
+        required
+      >
+
+      <input
+        type="password"
+        id="senha"
+        placeholder="Senha"
+        required
+      >
+
+      <label class="remember">
+        <input type="checkbox">
+        Lembrar acesso
+      </label>
+
+      <button type="submit">
+        Entrar
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<script src="js/login.js"></script>
+
+</body>
+</html>
