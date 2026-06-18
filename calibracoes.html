@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Calibrações</title>
+
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../css/dashboard.css">
+<link rel="stylesheet" href="../css/calibracoes.css">
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<aside class="sidebar">
+
+<h2>Fundição Moreno</h2>
+
+<ul>
+
+<li><a href="dashboard.html">Dashboard</a></li>
+
+<li><a href="instrumentos.html">Instrumentos</a></li>
+
+<li>
+<a class="active" href="calibracoes.html">
+Calibrações
+</a>
+</li>
+
+</ul>
+
+</aside>
+
+<main class="content">
+
+<h1>Controle de Calibrações</h1>
+
+<div class="form-card">
+
+<form id="calibracaoForm">
+
+<input
+type="text"
+id="instrumento"
+placeholder="Instrumento"
+required>
+
+<input
+type="text"
+id="empresa"
+placeholder="Empresa Calibradora"
+required>
+
+<input
+type="text"
+id="certificado"
+placeholder="Nº Certificado">
+
+<input
+type="date"
+id="dataCalibracao"
+required>
+
+<input
+type="date"
+id="validade"
+required>
+
+<button type="submit">
+Salvar Calibração
+</button>
+
+</form>
+
+</div>
+
+<div class="table-card">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Instrumento</th>
+<th>Empresa</th>
+<th>Certificado</th>
+<th>Validade</th>
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tabelaCalibracoes">
+
+</tbody>
+
+</table>
+
+</div>
+
+</main>
+
+</div>
+
+<script src="../js/calibracoes.js"></script>
+
+</body>
+</html>
