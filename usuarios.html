@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Usuários</title>
+
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../css/dashboard.css">
+<link rel="stylesheet" href="../css/usuarios.css">
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<aside class="sidebar">
+
+<h2>Fundição Moreno</h2>
+
+<ul>
+
+<li><a href="dashboard.html">Dashboard</a></li>
+<li><a href="instrumentos.html">Instrumentos</a></li>
+<li><a href="calibracoes.html">Calibrações</a></li>
+<li><a href="controle-dimensional.html">Controle Dimensional</a></li>
+
+<li>
+<a class="active"
+href="usuarios.html">
+Usuários
+</a>
+</li>
+
+</ul>
+
+</aside>
+
+<main class="content">
+
+<h1>Usuários</h1>
+
+<div class="form-card">
+
+<form id="usuarioForm">
+
+<input
+type="text"
+id="nome"
+placeholder="Nome Completo"
+required>
+
+<input
+type="email"
+id="email"
+placeholder="Email"
+required>
+
+<select id="perfil">
+
+<option>
+Funcionário
+</option>
+
+<option>
+Supervisor
+</option>
+
+<option>
+Desenvolvedor
+</option>
+
+</select>
+
+<button type="submit">
+Cadastrar
+</button>
+
+</form>
+
+</div>
+
+<div class="table-card">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Nome</th>
+<th>Email</th>
+<th>Perfil</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tabelaUsuarios">
+
+</tbody>
+
+</table>
+
+</div>
+
+</main>
+
+</div>
+
+<script src="../js/usuarios.js"></script>
+
+</body>
+</html>
