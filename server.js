@@ -259,12 +259,13 @@ app.get("/api/users", requireDatabase, requireAuth(["desenvolvedor", "gestor"]),
   res.json(result.rows);
 });
 
-app.post("/api/users", requireDatabase, requireAuth(["desenvolvedor", "gestor"]), async (req, res) => {
-  const role = req.body.role || req.body.perfil || "funcionario";
-  if (role === "desenvolvedor" && req.user.role !== "desenvolvedor") {
-    res.status(403).json({ error: "Somente desenvolvedor pode criar outro desenvolvedor." });
+app.post("/api/users", requireDatabase, requireAuth(["desenvolvedor"]), async (req, res) => {
+  if (normalizeEmail(req.user.email) !== normalizeEmail(process.env.DEV_EMAIL || "duriganrian7@gmail.com")) {
+    res.status(403).json({ error: "Somente o desenvolvedor principal pode cadastrar usuarios." });
     return;
   }
+
+  const role = req.body.role || req.body.perfil || "funcionario";
 
   const user = {
     id: id("user"),
@@ -320,7 +321,12 @@ app.get("/api/records/:collection", requireDatabase, requireAuth(), async (req, 
   res.json(result.rows);
 });
 
-app.post("/api/records/:collection", requireDatabase, requireAuth(), async (req, res) => {
+app.post("/api/records/:collection", requireDatabase, requireAuth(["desenvolvedor"]), async (req, res) => {
+  if (normalizeEmail(req.user.email) !== normalizeEmail(process.env.DEV_EMAIL || "duriganrian7@gmail.com")) {
+    res.status(403).json({ error: "Somente o administrador pode cadastrar registros." });
+    return;
+  }
+
   const collection = req.params.collection;
   if (!allowedCollections.has(collection)) {
     res.status(404).json({ error: "Colecao desconhecida." });
@@ -328,7 +334,7 @@ app.post("/api/records/:collection", requireDatabase, requireAuth(), async (req,
   }
 
   const record = {
-    id: id(collection),
+    id: req.body.id || id(collection),
     title: req.body.title || req.body.titulo || req.body.nome || req.body.codigo || req.body.instrumento || "",
     status: req.body.status || req.body.resultado || "",
     data: req.body
@@ -336,11 +342,79 @@ app.post("/api/records/:collection", requireDatabase, requireAuth(), async (req,
 
   await pool.query(
     `insert into records (id, collection, title, status, data, created_by_email, created_by_name)
-     values ($1, $2, $3, $4, $5, $6, $7)`,
+     values ($1, $2, $3, $4, $5, $6, $7)
+     on conflict (id) do update set
+       title = excluded.title,
+       status = excluded.status,
+       data = excluded.data,
+       updated_at = now(),
+       updated_by_email = $6`,
     [record.id, collection, record.title, record.status, record.data, req.user.email, req.user.name]
   );
   await audit("Registro criado", record.title, collection, record.id, req.user);
   res.status(201).json(record);
+});
+
+app.put("/api/records/:collection/:id", requireDatabase, requireAuth(["desenvolvedor"]), async (req, res) => {
+  if (normalizeEmail(req.user.email) !== normalizeEmail(process.env.DEV_EMAIL || "duriganrian7@gmail.com")) {
+    res.status(403).json({ error: "Somente o administrador pode editar registros." });
+    return;
+  }
+
+  const collection = req.params.collection;
+  if (!allowedCollections.has(collection)) {
+    res.status(404).json({ error: "Colecao desconhecida." });
+    return;
+  }
+
+  const record = {
+    id: req.params.id,
+    title: req.body.title || req.body.titulo || req.body.nome || req.body.codigo || req.body.instrumento || "",
+    status: req.body.status || req.body.resultado || "",
+    data: req.body
+  };
+
+  const result = await pool.query(
+    `update records
+     set title = $1, status = $2, data = $3, updated_at = now(), updated_by_email = $4
+     where id = $5 and collection = $6
+     returning id, collection, title, status, data`,
+    [record.title, record.status, record.data, req.user.email, record.id, collection]
+  );
+
+  if (!result.rows[0]) {
+    res.status(404).json({ error: "Registro nao encontrado." });
+    return;
+  }
+
+  await audit("Registro editado", record.title, collection, record.id, req.user);
+  res.json(result.rows[0]);
+});
+
+app.delete("/api/records/:collection/:id", requireDatabase, requireAuth(["desenvolvedor"]), async (req, res) => {
+  if (normalizeEmail(req.user.email) !== normalizeEmail(process.env.DEV_EMAIL || "duriganrian7@gmail.com")) {
+    res.status(403).json({ error: "Somente o administrador pode excluir registros." });
+    return;
+  }
+
+  const collection = req.params.collection;
+  if (!allowedCollections.has(collection)) {
+    res.status(404).json({ error: "Colecao desconhecida." });
+    return;
+  }
+
+  const result = await pool.query(
+    "delete from records where id = $1 and collection = $2 returning title",
+    [req.params.id, collection]
+  );
+
+  if (!result.rows[0]) {
+    res.status(404).json({ error: "Registro nao encontrado." });
+    return;
+  }
+
+  await audit("Registro excluido", result.rows[0].title || req.params.id, collection, req.params.id, req.user);
+  res.json({ ok: true });
 });
 
 app.delete("/api/database", requireDatabase, requireAuth(["desenvolvedor"]), async (req, res) => {

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nao Conformidades | Sistema de Metrologia</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" data-sidebar></aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">Tratativas</span>
+          <h1>Nao Conformidades</h1>
+          <p>Acompanhe desvios de calibracao, instrumentos bloqueados, acoes corretivas e prazos de fechamento.</p>
+        </div>
+        <div class="userbar" data-userbar></div>
+      </header>
+
+      <section class="section-grid">
+        <div class="form-card">
+          <h2>Cadastrar ocorrencia</h2>
+          <form id="naoConformidadeForm">
+            <div class="form-grid">
+              <div class="field">
+                <label for="codigo">Codigo</label>
+                <input id="codigo" required>
+              </div>
+              <div class="field">
+                <label for="origem">Origem</label>
+                <select id="origem">
+                  <option>Calibracao</option>
+                  <option>Controle dimensional</option>
+                  <option>Auditoria</option>
+                  <option>Processo</option>
+                  <option>Cliente</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="referencia">Instrumento / peca</label>
+                <input id="referencia">
+              </div>
+              <div class="field">
+                <label for="severidade">Severidade</label>
+                <select id="severidade">
+                  <option>Baixa</option>
+                  <option selected>Media</option>
+                  <option>Alta</option>
+                  <option>Critica</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="responsavel">Responsavel</label>
+                <input id="responsavel">
+              </div>
+              <div class="field">
+                <label for="prazo">Prazo</label>
+                <input type="date" id="prazo">
+              </div>
+              <div class="field">
+                <label for="status">Status</label>
+                <select id="status">
+                  <option>Aberta</option>
+                  <option>Em analise</option>
+                  <option>Acao definida</option>
+                  <option>Concluida</option>
+                  <option>Cancelada</option>
+                </select>
+              </div>
+              <div class="field full-row">
+                <label for="descricao">Descricao do desvio</label>
+                <textarea id="descricao" required></textarea>
+              </div>
+              <div class="field full-row">
+                <label for="acao">Acao corretiva / contencao</label>
+                <textarea id="acao"></textarea>
+              </div>
+            </div>
+            <button class="primary-button" type="submit">Salvar ocorrencia</button>
+          </form>
+        </div>
+
+        <div class="table-card">
+          <h2>Ocorrencias cadastradas</h2>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Codigo</th>
+                  <th>Origem</th>
+                  <th>Referencia</th>
+                  <th>Prazo</th>
+                  <th>Status</th>
+                  <th class="actions-column" data-actions-header>Acoes</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaNaoConformidades"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="nao-conformidades.js"></script>
+</body>
+</html>

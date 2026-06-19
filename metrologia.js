@@ -6,6 +6,9 @@ if (session) {
   const form = document.getElementById("metrologiaForm");
   const cards = document.getElementById("metrologyCards");
   const tabela = document.getElementById("tabelaMetrologia");
+  const actionHeader = document.querySelector("[data-actions-header]");
+  const canManage = MetroApp.canManageRecords(session);
+  let editing = null;
 
   const categories = {
     standards: { label: "Padroes", key: MetroApp.keys.standards, entity: "padrao" },
@@ -16,34 +19,102 @@ if (session) {
     suppliers: { label: "Fornecedores", key: MetroApp.keys.suppliers, entity: "fornecedor" }
   };
 
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const category = categories[document.getElementById("tipoRegistro").value];
+  if (actionHeader) actionHeader.hidden = !canManage;
 
-    MetroApp.createRecord(
-      category.key,
-      {
-        tipo: category.label,
-        titulo: document.getElementById("titulo").value.trim(),
-        referencia: document.getElementById("referencia").value.trim(),
-        responsavel: document.getElementById("responsavel").value.trim(),
-        dataRegistro: document.getElementById("dataRegistro").value,
-        validade: document.getElementById("validade").value,
-        status: document.getElementById("status").value,
-        descricao: document.getElementById("descricao").value.trim()
-      },
-      `${category.label} registrado`,
-      category.entity
-    );
+  if (!canManage) {
+    MetroApp.renderReadOnlyNotice(form, "Esta central fica em consulta para funcionarios e gestores. Somente o administrador pode cadastrar, editar ou excluir registros metrologicos.");
+  } else {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const categoryKey = editing?.categoryId || document.getElementById("tipoRegistro").value;
+      const category = categories[categoryKey];
+      const data = collectFormData(category);
 
+      if (editing) {
+        MetroApp.updateRecord(category.key, editing.id, data, `${category.label} editado`, category.entity);
+      } else {
+        MetroApp.createRecord(category.key, data, `${category.label} registrado`, category.entity);
+      }
+
+      resetFormState();
+      renderizar();
+    });
+
+    tabela.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-action]");
+      if (!button) return;
+
+      const category = categories[button.dataset.category];
+      if (!category) return;
+      const item = MetroApp.read(category.key, []).find((record) => record.id === button.dataset.id);
+      if (!item) return;
+
+      if (button.dataset.action === "edit") {
+        fillForm(item, button.dataset.category);
+        editing = { id: item.id, categoryId: button.dataset.category };
+        document.getElementById("tipoRegistro").disabled = true;
+        form.querySelector("button[type='submit']").textContent = "Salvar alteracoes";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      if (button.dataset.action === "delete" && confirm("Excluir este registro metrologico?")) {
+        MetroApp.removeRecord(category.key, item.id, `${category.label} excluido`, category.entity);
+        renderizar();
+      }
+    });
+  }
+
+  function collectFormData(category) {
+    return {
+      tipo: category.label,
+      titulo: document.getElementById("titulo").value.trim(),
+      referencia: document.getElementById("referencia").value.trim(),
+      responsavel: document.getElementById("responsavel").value.trim(),
+      dataRegistro: document.getElementById("dataRegistro").value,
+      validade: document.getElementById("validade").value,
+      status: document.getElementById("status").value,
+      descricao: document.getElementById("descricao").value.trim()
+    };
+  }
+
+  function fillForm(item, categoryId) {
+    Object.entries({
+      tipoRegistro: categoryId,
+      titulo: item.titulo,
+      referencia: item.referencia,
+      responsavel: item.responsavel,
+      dataRegistro: item.dataRegistro,
+      validade: item.validade,
+      status: item.status,
+      descricao: item.descricao
+    }).forEach(([id, value]) => {
+      document.getElementById(id).value = value || "";
+    });
+  }
+
+  function resetFormState() {
     form.reset();
-    renderizar();
-  });
+    editing = null;
+    document.getElementById("tipoRegistro").disabled = false;
+    form.querySelector("button[type='submit']").textContent = "Salvar registro";
+  }
 
   function allRecords() {
-    return Object.values(categories).flatMap((category) => (
-      MetroApp.read(category.key, []).map((item) => ({ ...item, tipo: category.label }))
+    return Object.entries(categories).flatMap(([categoryId, category]) => (
+      MetroApp.read(category.key, []).map((item) => ({ ...item, tipo: category.label, categoryId }))
     )).sort((a, b) => new Date(b.criadoEm) - new Date(a.criadoEm));
+  }
+
+  function actionButtons(item) {
+    if (!canManage) return "";
+    return `
+      <td>
+        <div class="row-actions">
+          <button class="edit-button" type="button" data-action="edit" data-category="${MetroApp.escapeHtml(item.categoryId)}" data-id="${MetroApp.escapeHtml(item.id)}">Editar</button>
+          <button class="delete-button" type="button" data-action="delete" data-category="${MetroApp.escapeHtml(item.categoryId)}" data-id="${MetroApp.escapeHtml(item.id)}">Excluir</button>
+        </div>
+      </td>
+    `;
   }
 
   function renderCards() {
@@ -72,10 +143,11 @@ if (session) {
             <td>${MetroApp.escapeHtml(item.referencia || "-")}</td>
             <td>${MetroApp.formatDate(item.validade)}</td>
             <td><span class="status-pill ${status}">${MetroApp.escapeHtml(item.status || "-")}</span></td>
+            ${actionButtons(item)}
           </tr>
         `;
       }).join("")
-      : `<tr><td colspan="5"><div class="empty-state">Nenhum registro metrologico complementar cadastrado.</div></td></tr>`;
+      : `<tr><td colspan="${canManage ? 6 : 5}"><div class="empty-state">Nenhum registro metrologico complementar cadastrado.</div></td></tr>`;
   }
 
   renderizar();
