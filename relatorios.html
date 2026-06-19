@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatorios | Sistema de Metrologia</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" data-sidebar></aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">Analise</span>
+          <h1>Relatorios</h1>
+          <p>Indicadores de validade, nao conformidades, planos, pessoas e atividade do sistema de metrologia.</p>
+        </div>
+        <div class="userbar" data-userbar></div>
+      </header>
+
+      <section class="cards" id="relatorioCards"></section>
+
+      <section class="wide-grid">
+        <div class="table-card">
+          <h2>Calibracoes vencidas ou proximas</h2>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Instrumento</th>
+                  <th>Validade</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="relatorioCalibracoes"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <h2>Nao conformidades por status</h2>
+          <div class="report-bars" id="relatorioNaoConformidades"></div>
+        </div>
+
+        <div class="table-card">
+          <h2>Planos de inspecao</h2>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Codigo</th>
+                  <th>Peca</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="relatorioPlanos"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <h2>Ultimas atividades</h2>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Acao</th>
+                  <th>Usuario</th>
+                </tr>
+              </thead>
+              <tbody id="relatorioAuditoria"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="relatorios.js"></script>
+</body>
+</html>

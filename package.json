@@ -6,7 +6,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "check": "node --check server.js && node --check app.js && node --check dashboard.js && node --check desenvolvedor.js && node --check metrologia.js && node --check auditoria.js && node --check calibracoes.js && node --check controle-dimensional.js && node --check instrumentos.js && node --check login.js && node --check usuarios.js"
+    "check": "node --check server.js && node --check app.js && node --check dashboard.js && node --check desenvolvedor.js && node --check metrologia.js && node --check auditoria.js && node --check calibracoes.js && node --check controle-dimensional.js && node --check instrumentos.js && node --check login.js && node --check usuarios.js && node --check planos-inspecao.js && node --check nao-conformidades.js && node --check relatorios.js"
   },
   "engines": {
     "node": ">=20"

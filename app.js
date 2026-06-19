@@ -70,7 +70,10 @@ const MetroApp = (() => {
     { label: "Instrumentos", href: "instrumentos.html", roles: ["desenvolvedor", "gestor", "funcionario"] },
     { label: "Calibracoes", href: "calibracoes.html", roles: ["desenvolvedor", "gestor", "funcionario"] },
     { label: "Controle Dimensional", href: "controle-dimensional.html", roles: ["desenvolvedor", "gestor", "funcionario"] },
-    { label: "Usuarios", href: "usuarios.html", roles: ["desenvolvedor", "gestor"] },
+    { label: "Planos", href: "planos-inspecao.html", roles: ["desenvolvedor", "gestor", "funcionario"] },
+    { label: "Nao conformidades", href: "nao-conformidades.html", roles: ["desenvolvedor", "gestor", "funcionario"] },
+    { label: "Relatorios", href: "relatorios.html", roles: ["desenvolvedor", "gestor", "funcionario"] },
+    { label: "Usuarios", href: "usuarios.html", roles: ["desenvolvedor"] },
     { label: "Auditoria", href: "auditoria.html", roles: ["desenvolvedor", "gestor"] },
     { label: "Desenvolvedor", href: "desenvolvedor.html", roles: ["desenvolvedor"] }
   ];
@@ -258,6 +261,16 @@ const MetroApp = (() => {
     return item.roles.includes(role);
   }
 
+  function canManageRecords(user = getSession()) {
+    return user?.perfil === "desenvolvedor" && normalizeEmail(user.email) === developerEmail;
+  }
+
+  function assertCanManageRecords() {
+    if (!canManageRecords()) {
+      throw new Error("Somente o administrador pode cadastrar, editar ou excluir registros.");
+    }
+  }
+
   function requireAuth(roles) {
     init();
     const session = getSession();
@@ -288,6 +301,8 @@ const MetroApp = (() => {
       })
       .join("");
 
+    ensureMobileNavigation();
+
     sidebar.innerHTML = `
       <div class="sidebar-brand">
         <strong>Moreno</strong>
@@ -311,6 +326,57 @@ const MetroApp = (() => {
     if (logoutButton) {
       logoutButton.addEventListener("click", logout);
     }
+
+    sidebar.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", closeMobileNavigation);
+    });
+  }
+
+  function ensureMobileNavigation() {
+    if (!document.querySelector("[data-nav-toggle]")) {
+      const button = document.createElement("button");
+      button.className = "mobile-nav-toggle";
+      button.type = "button";
+      button.setAttribute("aria-label", "Abrir navegacao");
+      button.setAttribute("aria-expanded", "false");
+      button.setAttribute("data-nav-toggle", "");
+      button.innerHTML = "<span></span><span></span><span></span>";
+      document.body.appendChild(button);
+
+      const overlay = document.createElement("div");
+      overlay.className = "sidebar-overlay";
+      overlay.setAttribute("data-nav-overlay", "");
+      document.body.appendChild(overlay);
+
+      button.addEventListener("click", () => {
+        const isOpen = document.body.classList.toggle("nav-open");
+        button.setAttribute("aria-expanded", String(isOpen));
+        button.setAttribute("aria-label", isOpen ? "Fechar navegacao" : "Abrir navegacao");
+      });
+      overlay.addEventListener("click", closeMobileNavigation);
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeMobileNavigation();
+      });
+    }
+  }
+
+  function closeMobileNavigation() {
+    document.body.classList.remove("nav-open");
+    const button = document.querySelector("[data-nav-toggle]");
+    if (button) {
+      button.setAttribute("aria-expanded", "false");
+      button.setAttribute("aria-label", "Abrir navegacao");
+    }
+  }
+
+  function renderReadOnlyNotice(form, message = "Seu perfil pode consultar estes dados. Somente o administrador pode cadastrar, editar ou excluir registros.") {
+    const card = form?.closest(".form-card");
+    if (!card) return;
+    card.classList.add("notice-card");
+    card.innerHTML = `
+      <h2>Modo consulta</h2>
+      <p>${escapeHtml(message)}</p>
+    `;
   }
 
   function labelRole(role) {
@@ -340,6 +406,7 @@ const MetroApp = (() => {
   }
 
   function createRecord(key, data, action, entityName) {
+    assertCanManageRecords();
     const session = getSession();
     const record = {
       id: uid(entityName || "item"),
@@ -357,6 +424,7 @@ const MetroApp = (() => {
   }
 
   function updateRecord(key, id, changes, action, entityName) {
+    assertCanManageRecords();
     const list = read(key, []);
     const index = list.findIndex((item) => item.id === id);
     if (index < 0) return null;
@@ -368,14 +436,17 @@ const MetroApp = (() => {
     };
     write(key, list);
     audit(action, list[index].nome || list[index].codigo || id, entityName, id);
+    syncRecordUpdate(key, list[index]);
     return list[index];
   }
 
   function removeRecord(key, id, action, entityName) {
+    assertCanManageRecords();
     const list = read(key, []);
     const item = list.find((record) => record.id === id);
     write(key, list.filter((record) => record.id !== id));
     audit(action, item?.nome || item?.codigo || id, entityName, id);
+    syncRecordDelete(key, id);
   }
 
   function resetDatabase() {
@@ -444,6 +515,34 @@ const MetroApp = (() => {
     }).catch(() => {
       // A interface continua funcionando offline; o proximo backend real pode reprocessar dados locais.
     });
+  }
+
+  function syncRecordUpdate(key, record) {
+    const collection = recordCollections[key];
+    const token = localStorage.getItem("metro.apiToken");
+    if (!collection || !token || !record?.id) return;
+
+    fetch(`/api/records/${collection}/${encodeURIComponent(record.id)}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(record)
+    }).catch(() => {});
+  }
+
+  function syncRecordDelete(key, id) {
+    const collection = recordCollections[key];
+    const token = localStorage.getItem("metro.apiToken");
+    if (!collection || !token || !id) return;
+
+    fetch(`/api/records/${collection}/${encodeURIComponent(id)}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }).catch(() => {});
   }
 
   async function safeJson(response) {
@@ -521,6 +620,8 @@ const MetroApp = (() => {
     getSession,
     requireAuth,
     renderShell,
+    canManageRecords,
+    renderReadOnlyNotice,
     audit,
     createRecord,
     updateRecord,

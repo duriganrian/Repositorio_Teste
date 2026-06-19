@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planos de Inspecao | Sistema de Metrologia</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" data-sidebar></aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">Rotina metrologica</span>
+          <h1>Planos de Inspecao</h1>
+          <p>Controle de pecas, caracteristicas, frequencia, amostragem e instrumentos exigidos para cada plano.</p>
+        </div>
+        <div class="userbar" data-userbar></div>
+      </header>
+
+      <section class="section-grid">
+        <div class="form-card">
+          <h2>Cadastrar plano</h2>
+          <form id="planoForm">
+            <div class="form-grid">
+              <div class="field">
+                <label for="codigo">Codigo do plano</label>
+                <input id="codigo" required>
+              </div>
+              <div class="field">
+                <label for="peca">Peca / produto</label>
+                <input id="peca" required>
+              </div>
+              <div class="field">
+                <label for="revisao">Revisao</label>
+                <input id="revisao" placeholder="Rev. 00">
+              </div>
+              <div class="field">
+                <label for="frequencia">Frequencia</label>
+                <input id="frequencia" placeholder="Por lote, diaria, setup...">
+              </div>
+              <div class="field">
+                <label for="amostragem">Amostragem</label>
+                <input id="amostragem" placeholder="100%, 5 pecas, NQA...">
+              </div>
+              <div class="field">
+                <label for="instrumento">Instrumento</label>
+                <input id="instrumento" list="instrumentosList">
+                <datalist id="instrumentosList"></datalist>
+              </div>
+              <div class="field">
+                <label for="responsavel">Responsavel</label>
+                <input id="responsavel">
+              </div>
+              <div class="field">
+                <label for="validade">Validade / revisao ate</label>
+                <input type="date" id="validade">
+              </div>
+              <div class="field">
+                <label for="status">Status</label>
+                <select id="status">
+                  <option>Ativo</option>
+                  <option>Em revisao</option>
+                  <option>Pendente</option>
+                  <option>Obsoleto</option>
+                </select>
+              </div>
+              <div class="field full-row">
+                <label for="caracteristicas">Caracteristicas controladas</label>
+                <textarea id="caracteristicas" required></textarea>
+              </div>
+              <div class="field full-row">
+                <label for="observacoes">Observacoes</label>
+                <textarea id="observacoes"></textarea>
+              </div>
+            </div>
+            <button class="primary-button" type="submit">Salvar plano</button>
+          </form>
+        </div>
+
+        <div class="table-card">
+          <h2>Planos cadastrados</h2>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Codigo</th>
+                  <th>Peca</th>
+                  <th>Frequencia</th>
+                  <th>Instrumento</th>
+                  <th>Status</th>
+                  <th class="actions-column" data-actions-header>Acoes</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaPlanos"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="planos-inspecao.js"></script>
+</body>
+</html>

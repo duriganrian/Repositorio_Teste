@@ -1,4 +1,4 @@
-const session = MetroApp.requireAuth(["desenvolvedor", "gestor"]);
+const session = MetroApp.requireAuth(["desenvolvedor"]);
 
 if (session) {
   MetroApp.renderShell("usuarios.html");
@@ -6,12 +6,6 @@ if (session) {
   const form = document.getElementById("usuarioForm");
   const tabela = document.getElementById("tabelaUsuarios");
   const perfilSelect = document.getElementById("perfil");
-
-  if (session.perfil !== "desenvolvedor") {
-    [...perfilSelect.options].forEach((option) => {
-      if (option.value === "desenvolvedor") option.remove();
-    });
-  }
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
