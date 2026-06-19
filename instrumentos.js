@@ -1,91 +1,58 @@
-const formulario =
-document.getElementById("instrumentoForm");
+const session = MetroApp.requireAuth();
 
-const tabela =
-document.getElementById("tabelaInstrumentos");
+if (session) {
+  MetroApp.renderShell("instrumentos.html");
 
-let instrumentos =
-JSON.parse(
-localStorage.getItem("instrumentos")
-) || [];
+  const form = document.getElementById("instrumentoForm");
+  const tabela = document.getElementById("tabelaInstrumentos");
 
-renderizar();
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
 
-formulario.addEventListener(
-"submit",
-function(e){
+    MetroApp.createRecord(
+      MetroApp.keys.instruments,
+      {
+        codigo: document.getElementById("codigo").value.trim(),
+        nome: document.getElementById("nome").value.trim(),
+        tipo: document.getElementById("tipo").value.trim(),
+        fabricante: document.getElementById("fabricante").value.trim(),
+        modelo: document.getElementById("modelo").value.trim(),
+        serie: document.getElementById("serie").value.trim(),
+        faixa: document.getElementById("faixa").value.trim(),
+        resolucao: document.getElementById("resolucao").value.trim(),
+        localizacao: document.getElementById("localizacao").value.trim(),
+        responsavel: document.getElementById("responsavel").value.trim(),
+        criticidade: document.getElementById("criticidade").value,
+        status: document.getElementById("status").value,
+        ultimaCalibracao: document.getElementById("ultimaCalibracao").value,
+        proximaCalibracao: document.getElementById("proximaCalibracao").value
+      },
+      "Instrumento cadastrado",
+      "instrumento"
+    );
 
-e.preventDefault();
+    form.reset();
+    renderizar();
+  });
 
-const instrumento = {
+  function renderizar() {
+    const instrumentos = MetroApp.read(MetroApp.keys.instruments, []);
+    tabela.innerHTML = instrumentos.length
+      ? instrumentos.map((item) => {
+        const status = MetroApp.calibrationStatus(item.proximaCalibracao);
+        return `
+          <tr>
+            <td>${MetroApp.escapeHtml(item.codigo)}</td>
+            <td>${MetroApp.escapeHtml(item.nome)}</td>
+            <td>${MetroApp.escapeHtml(item.tipo)}</td>
+            <td>${MetroApp.escapeHtml(item.localizacao || "-")}</td>
+            <td>${MetroApp.formatDate(item.proximaCalibracao)}</td>
+            <td><span class="status-pill ${status.className}">${status.label}</span></td>
+          </tr>
+        `;
+      }).join("")
+      : `<tr><td colspan="6"><div class="empty-state">Nenhum instrumento cadastrado.</div></td></tr>`;
+  }
 
-codigo:
-document.getElementById("codigo").value,
-
-nome:
-document.getElementById("nome").value,
-
-tipo:
-document.getElementById("tipo").value,
-
-fabricante:
-document.getElementById("fabricante").value,
-
-modelo:
-document.getElementById("modelo").value,
-
-serie:
-document.getElementById("serie").value,
-
-ultimaCalibracao:
-document.getElementById(
-"ultimaCalibracao"
-).value,
-
-proximaCalibracao:
-document.getElementById(
-"proximaCalibracao"
-).value
-
-};
-
-instrumentos.push(instrumento);
-
-localStorage.setItem(
-"instrumentos",
-JSON.stringify(instrumentos)
-);
-
-formulario.reset();
-
-renderizar();
-
-});
-
-function renderizar(){
-
-tabela.innerHTML = "";
-
-instrumentos.forEach(item=>{
-
-tabela.innerHTML += `
-
-<tr>
-
-<td>${item.codigo}</td>
-
-<td>${item.nome}</td>
-
-<td>${item.tipo}</td>
-
-<td>${item.serie}</td>
-
-<td>${item.proximaCalibracao}</td>
-
-</tr>
-
-`;
-
-});
-
+  renderizar();
 }

@@ -1,60 +1,61 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Auditoria</title>
-
-<link rel="stylesheet" href="../style.css">
-<link rel="stylesheet" href="../css/dashboard.css">
-<link rel="stylesheet" href="../css/auditoria.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auditoria | Sistema de Metrologia</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dashboard.css">
 </head>
-
 <body>
+  <div class="layout">
+    <aside class="sidebar" data-sidebar></aside>
 
-<div class="layout">
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">Rastreabilidade</span>
+          <h1>Auditoria</h1>
+          <p>Registro cronologico das acoes executadas no sistema por cada perfil.</p>
+        </div>
+        <div class="userbar" data-userbar></div>
+      </header>
 
-<aside class="sidebar">
+      <section class="table-card">
+        <h2>Filtros</h2>
+        <div class="form-grid">
+          <div class="field">
+            <label for="usuarioFiltro">Usuario</label>
+            <select id="usuarioFiltro"></select>
+          </div>
+          <div class="field">
+            <label for="acaoFiltro">Buscar acao</label>
+            <input id="acaoFiltro" placeholder="Ex.: calibracao, login, usuario">
+          </div>
+        </div>
+      </section>
 
-<h2>Fundição Moreno</h2>
+      <section class="table-card">
+        <h2>Historico de atividades</h2>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Acao</th>
+                <th>Detalhe</th>
+                <th>Usuario</th>
+                <th>Perfil</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaAuditoria"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
 
-</aside>
-
-<main class="content">
-
-<h1>Auditoria</h1>
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Data</th>
-<th>Ação</th>
-<th>Usuário</th>
-
-</tr>
-
-</thead>
-
-<tbody id="tabelaAuditoria">
-
-</tbody>
-
-</table>
-
-</main>
-
-</div>
-
-<script src="../js/auditoria.js"></script>
-
+  <script src="app.js"></script>
+  <script src="auditoria.js"></script>
 </body>
 </html>

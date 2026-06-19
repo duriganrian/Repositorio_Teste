@@ -1,120 +1,84 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Usuários</title>
-
-<link rel="stylesheet" href="../style.css">
-<link rel="stylesheet" href="../css/dashboard.css">
-<link rel="stylesheet" href="../css/usuarios.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Usuarios | Sistema de Metrologia</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dashboard.css">
 </head>
-
 <body>
+  <div class="layout">
+    <aside class="sidebar" data-sidebar></aside>
 
-<div class="layout">
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">Acessos</span>
+          <h1>Usuarios</h1>
+          <p>Cadastre funcionarios, gestores e acompanhe quais pessoas podem operar o sistema.</p>
+        </div>
+        <div class="userbar" data-userbar></div>
+      </header>
 
-<aside class="sidebar">
+      <section class="section-grid">
+        <div class="form-card">
+          <h2>Cadastrar usuario</h2>
+          <form id="usuarioForm">
+            <div class="field">
+              <label for="nome">Nome completo</label>
+              <input id="nome" required>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" required>
+            </div>
+            <div class="field">
+              <label for="senha">Senha inicial</label>
+              <input type="password" id="senha" required>
+            </div>
+            <div class="field">
+              <label for="perfil">Perfil</label>
+              <select id="perfil">
+                <option value="funcionario">Funcionario</option>
+                <option value="gestor">Gestor</option>
+                <option value="desenvolvedor">Desenvolvedor</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="cargo">Cargo</label>
+              <input id="cargo">
+            </div>
+            <div class="field">
+              <label for="setor">Setor</label>
+              <input id="setor" value="Metrologia">
+            </div>
+            <button class="primary-button" type="submit">Cadastrar usuario</button>
+          </form>
+        </div>
 
-<h2>Fundição Moreno</h2>
+        <div class="table-card">
+          <h2>Usuarios cadastrados</h2>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Email</th>
+                  <th>Perfil</th>
+                  <th>Cargo</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaUsuarios"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 
-<ul>
-
-<li><a href="dashboard.html">Dashboard</a></li>
-<li><a href="instrumentos.html">Instrumentos</a></li>
-<li><a href="calibracoes.html">Calibrações</a></li>
-<li><a href="controle-dimensional.html">Controle Dimensional</a></li>
-
-<li>
-<a class="active"
-href="usuarios.html">
-Usuários
-</a>
-</li>
-
-</ul>
-
-</aside>
-
-<main class="content">
-
-<h1>Usuários</h1>
-
-<div class="form-card">
-
-<form id="usuarioForm">
-
-<input
-type="text"
-id="nome"
-placeholder="Nome Completo"
-required>
-
-<input
-type="email"
-id="email"
-placeholder="Email"
-required>
-
-<select id="perfil">
-
-<option>
-Funcionário
-</option>
-
-<option>
-Supervisor
-</option>
-
-<option>
-Desenvolvedor
-</option>
-
-</select>
-
-<button type="submit">
-Cadastrar
-</button>
-
-</form>
-
-</div>
-
-<div class="table-card">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Nome</th>
-<th>Email</th>
-<th>Perfil</th>
-
-</tr>
-
-</thead>
-
-<tbody id="tabelaUsuarios">
-
-</tbody>
-
-</table>
-
-</div>
-
-</main>
-
-</div>
-
-<script src="../js/usuarios.js"></script>
-
+  <script src="app.js"></script>
+  <script src="usuarios.js"></script>
 </body>
 </html>

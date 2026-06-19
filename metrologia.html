@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metrologia | Sistema de Metrologia</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" data-sidebar></aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">Central operacional</span>
+          <h1>Metrologia</h1>
+          <p>Registre os itens que completam a rotina metrologica: padroes, planos, MSA, documentos, fornecedores e nao conformidades.</p>
+        </div>
+        <div class="userbar" data-userbar></div>
+      </header>
+
+      <section class="cards" id="metrologyCards"></section>
+
+      <section class="section-grid">
+        <div class="form-card">
+          <h2>Novo registro metrologico</h2>
+          <form id="metrologiaForm">
+            <div class="field">
+              <label for="tipoRegistro">Tipo de registro</label>
+              <select id="tipoRegistro">
+                <option value="standards">Padrao de referencia</option>
+                <option value="inspectionPlans">Plano de inspecao</option>
+                <option value="msa">MSA / R&amp;R</option>
+                <option value="nonconformities">Nao conformidade</option>
+                <option value="documents">Documento / procedimento</option>
+                <option value="suppliers">Fornecedor calibrador</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="titulo">Titulo</label>
+              <input id="titulo" required>
+            </div>
+            <div class="field">
+              <label for="referencia">Referencia</label>
+              <input id="referencia" placeholder="Codigo, norma, fornecedor ou documento">
+            </div>
+            <div class="field">
+              <label for="responsavel">Responsavel</label>
+              <input id="responsavel">
+            </div>
+            <div class="field">
+              <label for="dataRegistro">Data</label>
+              <input type="date" id="dataRegistro">
+            </div>
+            <div class="field">
+              <label for="validade">Validade / prazo</label>
+              <input type="date" id="validade">
+            </div>
+            <div class="field">
+              <label for="status">Status</label>
+              <select id="status">
+                <option>Ativo</option>
+                <option>Em analise</option>
+                <option>Pendente</option>
+                <option>Concluido</option>
+                <option>Bloqueado</option>
+              </select>
+            </div>
+            <div class="field full-row">
+              <label for="descricao">Descricao</label>
+              <textarea id="descricao" placeholder="Detalhe o requisito, acao, resultado ou observacao metrologica."></textarea>
+            </div>
+            <button class="primary-button" type="submit">Salvar registro</button>
+          </form>
+        </div>
+
+        <div class="table-card">
+          <h2>Ultimos registros</h2>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tipo</th>
+                  <th>Titulo</th>
+                  <th>Referencia</th>
+                  <th>Prazo</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaMetrologia"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="metrologia.js"></script>
+</body>
+</html>

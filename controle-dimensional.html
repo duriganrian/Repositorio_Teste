@@ -1,132 +1,100 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Controle Dimensional</title>
-
-<link rel="stylesheet" href="../style.css">
-<link rel="stylesheet" href="../css/dashboard.css">
-<link rel="stylesheet" href="../css/controle-dimensional.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle Dimensional | Sistema de Metrologia</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dashboard.css">
 </head>
-
 <body>
+  <div class="layout">
+    <aside class="sidebar" data-sidebar></aside>
 
-<div class="layout">
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">Inspecao dimensional</span>
+          <h1>Controle Dimensional</h1>
+          <p>Registre medicoes por peca, caracteristica, tolerancia, instrumento utilizado e resultado.</p>
+        </div>
+        <div class="userbar" data-userbar></div>
+      </header>
 
-<aside class="sidebar">
+      <section class="section-grid">
+        <div class="form-card">
+          <h2>Registrar medicao</h2>
+          <form id="dimensionalForm">
+            <div class="form-grid">
+              <div class="field">
+                <label for="ordem">Ordem / OP</label>
+                <input id="ordem">
+              </div>
+              <div class="field">
+                <label for="peca">Codigo da peca</label>
+                <input id="peca" required>
+              </div>
+              <div class="field">
+                <label for="lote">Lote</label>
+                <input id="lote">
+              </div>
+              <div class="field">
+                <label for="caracteristica">Caracteristica</label>
+                <input id="caracteristica" required>
+              </div>
+              <div class="field">
+                <label for="instrumento">Instrumento</label>
+                <input id="instrumento" list="instrumentosList">
+                <datalist id="instrumentosList"></datalist>
+              </div>
+              <div class="field">
+                <label for="nominal">Cota nominal</label>
+                <input type="number" step="0.001" id="nominal" required>
+              </div>
+              <div class="field">
+                <label for="minimo">Limite minimo</label>
+                <input type="number" step="0.001" id="minimo" required>
+              </div>
+              <div class="field">
+                <label for="maximo">Limite maximo</label>
+                <input type="number" step="0.001" id="maximo" required>
+              </div>
+              <div class="field">
+                <label for="medicao">Medicao encontrada</label>
+                <input type="number" step="0.001" id="medicao" required>
+              </div>
+              <div class="field full-row">
+                <label for="observacoes">Observacoes</label>
+                <textarea id="observacoes"></textarea>
+              </div>
+            </div>
+            <button class="primary-button" type="submit">Registrar medicao</button>
+          </form>
+        </div>
 
-<h2>Fundição Moreno</h2>
+        <div class="table-card">
+          <h2>Medicoes registradas</h2>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Peca</th>
+                  <th>Caracteristica</th>
+                  <th>Nominal</th>
+                  <th>Medicao</th>
+                  <th>Desvio</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaDimensional"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 
-<ul>
-
-<li><a href="dashboard.html">Dashboard</a></li>
-<li><a href="instrumentos.html">Instrumentos</a></li>
-<li><a href="calibracoes.html">Calibrações</a></li>
-
-<li>
-<a class="active"
-href="controle-dimensional.html">
-Controle Dimensional
-</a>
-</li>
-
-</ul>
-
-</aside>
-
-<main class="content">
-
-<h1>Controle Dimensional</h1>
-
-<div class="form-card">
-
-<form id="dimensionalForm">
-
-<input
-type="text"
-id="peca"
-placeholder="Código da Peça"
-required>
-
-<input
-type="text"
-id="caracteristica"
-placeholder="Característica"
-required>
-
-<input
-type="number"
-step="0.001"
-id="nominal"
-placeholder="Cota Nominal"
-required>
-
-<input
-type="number"
-step="0.001"
-id="minimo"
-placeholder="Tolerância Mínima"
-required>
-
-<input
-type="number"
-step="0.001"
-id="maximo"
-placeholder="Tolerância Máxima"
-required>
-
-<input
-type="number"
-step="0.001"
-id="medicao"
-placeholder="Medição"
-required>
-
-<button type="submit">
-Registrar Medição
-</button>
-
-</form>
-
-</div>
-
-<div class="table-card">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Peça</th>
-<th>Característica</th>
-<th>Nominal</th>
-<th>Medição</th>
-<th>Status</th>
-
-</tr>
-
-</thead>
-
-<tbody id="tabelaDimensional">
-
-</tbody>
-
-</table>
-
-</div>
-
-</main>
-
-</div>
-
-<script src="../js/controle-dimensional.js"></script>
-
+  <script src="app.js"></script>
+  <script src="controle-dimensional.js"></script>
 </body>
 </html>
