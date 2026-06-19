@@ -1,130 +1,62 @@
-const form =
-document.getElementById(
-"calibracaoForm"
-);
+const session = MetroApp.requireAuth();
 
-const tabela =
-document.getElementById(
-"tabelaCalibracoes"
-);
+if (session) {
+  MetroApp.renderShell("calibracoes.html");
 
-let calibracoes =
-JSON.parse(
-localStorage.getItem(
-"calibracoes"
-)
-) || [];
+  const form = document.getElementById("calibracaoForm");
+  const tabela = document.getElementById("tabelaCalibracoes");
+  const listaInstrumentos = document.getElementById("instrumentosList");
 
-renderizar();
+  function carregarInstrumentos() {
+    const instrumentos = MetroApp.read(MetroApp.keys.instruments, []);
+    listaInstrumentos.innerHTML = instrumentos.map((item) => `
+      <option value="${MetroApp.escapeHtml(item.codigo)} - ${MetroApp.escapeHtml(item.nome)}"></option>
+    `).join("");
+  }
 
-form.addEventListener(
-"submit",
-function(e){
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
 
-e.preventDefault();
+    MetroApp.createRecord(
+      MetroApp.keys.calibrations,
+      {
+        instrumento: document.getElementById("instrumento").value.trim(),
+        empresa: document.getElementById("empresa").value.trim(),
+        certificado: document.getElementById("certificado").value.trim(),
+        data: document.getElementById("dataCalibracao").value,
+        validade: document.getElementById("validade").value,
+        resultado: document.getElementById("resultado").value,
+        incerteza: document.getElementById("incerteza").value.trim(),
+        arquivo: document.getElementById("arquivo").value.trim(),
+        observacoes: document.getElementById("observacoes").value.trim()
+      },
+      "Calibracao registrada",
+      "calibracao"
+    );
 
-const registro = {
+    form.reset();
+    renderizar();
+  });
 
-instrumento:
-document.getElementById(
-"instrumento"
-).value,
+  function renderizar() {
+    const calibracoes = MetroApp.read(MetroApp.keys.calibrations, []);
+    tabela.innerHTML = calibracoes.length
+      ? calibracoes.map((item) => {
+        const status = MetroApp.calibrationStatus(item.validade);
+        return `
+          <tr>
+            <td>${MetroApp.escapeHtml(item.instrumento)}</td>
+            <td>${MetroApp.escapeHtml(item.empresa)}</td>
+            <td>${MetroApp.escapeHtml(item.certificado || "-")}</td>
+            <td>${MetroApp.formatDate(item.validade)}</td>
+            <td>${MetroApp.escapeHtml(item.resultado)}</td>
+            <td><span class="status-pill ${status.className}">${status.label}</span></td>
+          </tr>
+        `;
+      }).join("")
+      : `<tr><td colspan="6"><div class="empty-state">Nenhuma calibracao registrada.</div></td></tr>`;
+  }
 
-empresa:
-document.getElementById(
-"empresa"
-).value,
-
-certificado:
-document.getElementById(
-"certificado"
-).value,
-
-data:
-document.getElementById(
-"dataCalibracao"
-).value,
-
-validade:
-document.getElementById(
-"validade"
-).value
-
-};
-
-calibracoes.push(registro);
-
-localStorage.setItem(
-"calibracoes",
-JSON.stringify(calibracoes)
-);
-
-form.reset();
-
-renderizar();
-
-});
-
-function renderizar(){
-
-tabela.innerHTML = "";
-
-calibracoes.forEach(item=>{
-
-const hoje =
-new Date();
-
-const validade =
-new Date(item.validade);
-
-const diferenca =
-(validade-hoje)
-/(1000*60*60*24);
-
-let status = "";
-let classe = "";
-
-if(diferenca < 0){
-
-status = "Vencido";
-classe = "status-vencido";
-
-}
-else if(diferenca <= 30){
-
-status = "Próximo";
-
-classe = "status-alerta";
-
-}
-else{
-
-status = "Válido";
-
-classe = "status-ok";
-
-}
-
-tabela.innerHTML += `
-
-<tr>
-
-<td>${item.instrumento}</td>
-
-<td>${item.empresa}</td>
-
-<td>${item.certificado}</td>
-
-<td>${item.validade}</td>
-
-<td class="${classe}">
-${status}
-</td>
-
-</tr>
-
-`;
-
-});
-
+  carregarInstrumentos();
+  renderizar();
 }

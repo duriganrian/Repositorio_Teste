@@ -1,126 +1,71 @@
-const form =
-document.getElementById(
-"dimensionalForm"
-);
+const session = MetroApp.requireAuth();
 
-const tabela =
-document.getElementById(
-"tabelaDimensional"
-);
+if (session) {
+  MetroApp.renderShell("controle-dimensional.html");
 
-let registros =
-JSON.parse(
-localStorage.getItem(
-"controleDimensional"
-)
-) || [];
+  const form = document.getElementById("dimensionalForm");
+  const tabela = document.getElementById("tabelaDimensional");
+  const listaInstrumentos = document.getElementById("instrumentosList");
 
-renderizar();
+  function carregarInstrumentos() {
+    const instrumentos = MetroApp.read(MetroApp.keys.instruments, []);
+    listaInstrumentos.innerHTML = instrumentos.map((item) => `
+      <option value="${MetroApp.escapeHtml(item.codigo)} - ${MetroApp.escapeHtml(item.nome)}"></option>
+    `).join("");
+  }
 
-form.addEventListener(
-"submit",
-function(e){
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
 
-e.preventDefault();
+    const nominal = Number(document.getElementById("nominal").value);
+    const minimo = Number(document.getElementById("minimo").value);
+    const maximo = Number(document.getElementById("maximo").value);
+    const medicao = Number(document.getElementById("medicao").value);
+    const aprovado = medicao >= minimo && medicao <= maximo;
 
-const nominal =
-parseFloat(
-document.getElementById(
-"nominal"
-).value
-);
+    MetroApp.createRecord(
+      MetroApp.keys.dimensional,
+      {
+        ordem: document.getElementById("ordem").value.trim(),
+        peca: document.getElementById("peca").value.trim(),
+        lote: document.getElementById("lote").value.trim(),
+        caracteristica: document.getElementById("caracteristica").value.trim(),
+        instrumento: document.getElementById("instrumento").value.trim(),
+        nominal,
+        minimo,
+        maximo,
+        medicao,
+        desvio: Number((medicao - nominal).toFixed(3)),
+        status: aprovado ? "Aprovado" : "Reprovado",
+        observacoes: document.getElementById("observacoes").value.trim()
+      },
+      aprovado ? "Medicao aprovada" : "Medicao reprovada",
+      "controle-dimensional"
+    );
 
-const minimo =
-parseFloat(
-document.getElementById(
-"minimo"
-).value
-);
+    form.reset();
+    renderizar();
+  });
 
-const maximo =
-parseFloat(
-document.getElementById(
-"maximo"
-).value
-);
+  function renderizar() {
+    const registros = MetroApp.read(MetroApp.keys.dimensional, []);
+    tabela.innerHTML = registros.length
+      ? registros.map((item) => {
+        const classe = item.status === "Aprovado" ? "status-aprovado" : "status-reprovado";
+        return `
+          <tr>
+            <td>${MetroApp.escapeHtml(item.peca)}</td>
+            <td>${MetroApp.escapeHtml(item.caracteristica)}</td>
+            <td>${item.nominal}</td>
+            <td>${item.medicao}</td>
+            <td>${item.desvio}</td>
+            <td><span class="status-pill ${classe}">${item.status}</span></td>
+          </tr>
+        `;
+      }).join("")
+      : `<tr><td colspan="6"><div class="empty-state">Nenhuma medicao registrada.</div></td></tr>`;
+  }
 
-const medicao =
-parseFloat(
-document.getElementById(
-"medicao"
-).value
-);
-
-const aprovado =
-medicao >= minimo &&
-medicao <= maximo;
-
-const registro = {
-
-peca:
-document.getElementById(
-"peca"
-).value,
-
-caracteristica:
-document.getElementById(
-"caracteristica"
-).value,
-
-nominal,
-medicao,
-
-status:
-aprovado
-? "Aprovado"
-: "Reprovado"
-
-};
-
-registros.push(registro);
-
-localStorage.setItem(
-"controleDimensional",
-JSON.stringify(registros)
-);
-
-form.reset();
-
-renderizar();
-
-});
-
-function renderizar(){
-
-tabela.innerHTML = "";
-
-registros.forEach(item=>{
-
-const classe =
-item.status === "Aprovado"
-? "status-aprovado"
-: "status-reprovado";
-
-tabela.innerHTML += `
-
-<tr>
-
-<td>${item.peca}</td>
-
-<td>${item.caracteristica}</td>
-
-<td>${item.nominal}</td>
-
-<td>${item.medicao}</td>
-
-<td class="${classe}">
-${item.status}
-</td>
-
-</tr>
-
-`;
-
-});
-
+  carregarInstrumentos();
+  renderizar();
 }

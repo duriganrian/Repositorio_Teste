@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desenvolvedor | Sistema de Metrologia</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" data-sidebar></aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">Area restrita</span>
+          <h1>Desenvolvedor</h1>
+          <p>Perfis cadastrados, rastreabilidade por pessoa e manutencao do banco local do sistema.</p>
+        </div>
+        <div class="userbar" data-userbar></div>
+      </header>
+
+      <section class="section-grid">
+        <div class="profile-card">
+          <h2>Perfis cadastrados</h2>
+          <div class="profile-list" id="profileList"></div>
+        </div>
+
+        <div>
+          <section class="profile-card">
+            <h2 id="profileTitle">Perfil</h2>
+            <div id="profileDetails"></div>
+          </section>
+
+          <section class="table-card">
+            <h2>O que essa pessoa registrou</h2>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Modulo</th>
+                    <th>Registro</th>
+                    <th>Data</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="profileRecords"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="table-card">
+            <h2>Historico dessa pessoa</h2>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Acao</th>
+                    <th>Detalhe</th>
+                  </tr>
+                </thead>
+                <tbody id="profileAudit"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="danger-zone" id="databaseDangerZone">
+        <h2>Manutencao do banco de dados</h2>
+        <p>Esta acao remove todos os dados salvos no navegador: usuarios cadastrados, instrumentos, calibracoes, medicoes, registros de metrologia e auditoria. O usuario desenvolvedor padrao sera recriado para evitar bloqueio de acesso.</p>
+        <div class="form-grid">
+          <div class="field">
+            <label for="confirmacaoTexto">Digite APAGAR BANCO</label>
+            <input id="confirmacaoTexto" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="confirmacaoSenha">Confirme a senha do desenvolvedor</label>
+            <input id="confirmacaoSenha" type="password" autocomplete="current-password">
+          </div>
+        </div>
+        <div class="actions">
+          <button class="danger-button" type="button" id="btnResetDatabase">Excluir todo o banco</button>
+          <span class="message" id="resetMessage"></span>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="desenvolvedor.js"></script>
+</body>
+</html>
