@@ -4,125 +4,83 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Ferramentaria | Moreno Fundição</title>
+<title>Login | Sistema de Metrologia</title>
 
 <link rel="stylesheet" href="style.css">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
 <body>
 
-<div class="container">
+<main class="login-page">
 
-    <div class="logo">
-        <img src="logo.png" alt="Moreno Fundição">
-    </div>
+    <section class="login-panel">
 
-    <div class="login-card">
+        <div class="login-card">
 
-        <div class="card-header">
-
-            <span class="tag">
-                FERRAMENTARIA
+            <span class="eyebrow">
+                SISTEMA DE METROLOGIA
             </span>
 
-            <h1>Entrar no sistema</h1>
+            <h2>Entrar no sistema</h2>
 
             <p>
-                Selecione o modo de acesso e informe suas credenciais.
+                Informe suas credenciais para acessar a plataforma.
             </p>
 
-        </div>
-
-        <div class="card-body">
-
-            <div class="access-selector">
-
-                <button class="access-btn active">
-                    <i class="fa-solid fa-desktop"></i>
-                    Admin
-                </button>
-
-                <button class="access-btn">
-                    <i class="fa-solid fa-tablet-screen-button"></i>
-                    Tablet
-                </button>
-
-            </div>
-
-            <form>
+            <form class="login-form" id="loginForm">
 
                 <div class="field">
+                    <label for="email">Email</label>
 
-                    <label>Email</label>
-
-                    <div class="input-box">
-                        <i class="fa-regular fa-envelope"></i>
-
-                        <input
+                    <input
                         type="email"
-                        placeholder="seu@email.com">
-                    </div>
-
+                        id="email"
+                        placeholder="seu@email.com"
+                        autocomplete="username"
+                        required
+                    >
                 </div>
 
                 <div class="field">
+                    <label for="senha">Senha</label>
 
-                    <label>Senha</label>
-
-                    <div class="input-box">
-
-                        <i class="fa-solid fa-lock"></i>
-
-                        <input
+                    <input
                         type="password"
-                        placeholder="••••••••">
-
-                        <button
-                        type="button"
-                        class="eye-btn">
-
-                            <i class="fa-regular fa-eye"></i>
-
-                        </button>
-
-                    </div>
-
+                        id="senha"
+                        placeholder="••••••••"
+                        autocomplete="current-password"
+                        required
+                    >
                 </div>
 
-                <label class="remember">
-
-                    <input type="checkbox">
-
-                    <span>
-                        Lembrar por 24h
-                    </span>
-
+                <label class="checkline">
+                    <input type="checkbox" id="lembrar">
+                    Lembrar por 24h
                 </label>
 
+                <p class="message" id="loginMessage"></p>
+
                 <button
-                type="submit"
-                class="login-btn">
-
-                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
-
+                    class="primary-button"
+                    type="submit">
                     Entrar
-
                 </button>
 
             </form>
 
+            <div class="login-help">
+                Sistema interno para gerenciamento de instrumentos,
+                calibrações, medições e auditorias.
+            </div>
+
         </div>
 
-    </div>
+    </section>
 
-    <p class="footer">
-        Sistema interno de controle de ferramentaria
-    </p>
+</main>
 
-</div>
+<script src="app.js"></script>
+<script src="login.js"></script>
 
 </body>
 </html>
