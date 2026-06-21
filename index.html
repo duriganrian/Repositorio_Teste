@@ -3,90 +3,113 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login | Ferramentaria</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<title>Ferramentaria | Moreno Fundição</title>
+
 <link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
 <body>
 
 <div class="container">
 
-    <div class="logo-area">
+    <div class="logo">
         <img src="logo.png" alt="Moreno Fundição">
     </div>
 
     <div class="login-card">
 
         <div class="card-header">
-            <span class="tag">FERRAMENTARIA</span>
+
+            <span class="tag">
+                FERRAMENTARIA
+            </span>
 
             <h1>Entrar no sistema</h1>
 
             <p>
                 Selecione o modo de acesso e informe suas credenciais.
             </p>
+
         </div>
 
         <div class="card-body">
 
-            <div class="access-switch">
+            <div class="access-selector">
 
-                <button class="switch-btn active">
+                <button class="access-btn active">
                     <i class="fa-solid fa-desktop"></i>
                     Admin
                 </button>
 
-                <button class="switch-btn">
+                <button class="access-btn">
                     <i class="fa-solid fa-tablet-screen-button"></i>
                     Tablet
                 </button>
 
             </div>
 
-            <form id="loginForm">
+            <form>
 
                 <div class="field">
+
                     <label>Email</label>
 
-                    <div class="input-group">
+                    <div class="input-box">
                         <i class="fa-regular fa-envelope"></i>
 
                         <input
-                            type="email"
-                            placeholder="seu@email.com"
-                            autocomplete="username"
-                        >
+                        type="email"
+                        placeholder="seu@email.com">
                     </div>
+
                 </div>
 
                 <div class="field">
+
                     <label>Senha</label>
 
-                    <div class="input-group">
+                    <div class="input-box">
+
                         <i class="fa-solid fa-lock"></i>
 
                         <input
-                            type="password"
-                            placeholder="••••••••"
-                            autocomplete="current-password"
-                        >
+                        type="password"
+                        placeholder="••••••••">
 
-                        <button type="button" class="eye-btn">
+                        <button
+                        type="button"
+                        class="eye-btn">
+
                             <i class="fa-regular fa-eye"></i>
+
                         </button>
+
                     </div>
+
                 </div>
 
                 <label class="remember">
+
                     <input type="checkbox">
-                    Lembrar por 24h
+
+                    <span>
+                        Lembrar por 24h
+                    </span>
+
                 </label>
 
-                <button type="submit" class="login-btn">
+                <button
+                type="submit"
+                class="login-btn">
+
                     <i class="fa-solid fa-arrow-right-to-bracket"></i>
+
                     Entrar
+
                 </button>
 
             </form>
@@ -95,7 +118,7 @@
 
     </div>
 
-    <p class="footer-text">
+    <p class="footer">
         Sistema interno de controle de ferramentaria
     </p>
 
